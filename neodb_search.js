@@ -179,7 +179,7 @@
         }
 
         // 将结果添加到页面
-        const contentContainer = document.querySelector('#item-primary-mark') || document.querySelector('main');
+        const contentContainer = document.querySelector('#item-primary-action') || document.querySelector('main');
         if (contentContainer) {
             contentContainer.appendChild(container);
         } else {
