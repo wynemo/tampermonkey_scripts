@@ -2,7 +2,7 @@
 // @name         NeoDB 安娜档案搜索
 // @name:en      annas archive for NeoDB
 // @namespace    http://tampermonkey.net/
-// @version      0.1
+// @version      0.1.1
 // @description  在 NeoDB 书籍页面添加安娜档案搜索结果
 // @description:en  dispaly annas archive search result on NeoDB
 // @author       lozhang
