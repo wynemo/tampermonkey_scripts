@@ -2,19 +2,47 @@
 // @name         NeoDB 安娜档案搜索
 // @name:en      annas archive for NeoDB
 // @namespace    http://tampermonkey.net/
-// @version      0.1.1
+// @version      0.2.0
 // @description  在 NeoDB 书籍页面添加安娜档案搜索结果
 // @description:en  dispaly annas archive search result on NeoDB
 // @author       lozhang
 // @match        https://neodb.social/book/*
 // @grant        GM_xmlhttpRequest
-// @connect      zh.annas-archive.org
+// @grant        GM_getValue
+// @grant        GM_setValue
+// @grant        GM_registerMenuCommand
+// @connect      annas-archive.se
+// @connect      annas-archive.org
+// @connect      annas-archive.gs
 // @license MIT
 // ==/UserScript==
 
 
 (function() {
     'use strict';
+
+    // 默认域名配置
+    const DEFAULT_DOMAIN = 'zh.annas-archive.se';
+
+    // 获取当前配置的域名
+    function getDomain() {
+        return GM_getValue('annas_archive_domain', DEFAULT_DOMAIN);
+    }
+
+    // 注册菜单命令
+    GM_registerMenuCommand('⚙️ 设置 Anna\'s Archive 域名', () => {
+        const currentDomain = getDomain();
+        const newDomain = prompt('请输入 Anna\'s Archive 域名（如 zh.annas-archive.se）：', currentDomain);
+        if (newDomain && newDomain.trim()) {
+            GM_setValue('annas_archive_domain', newDomain.trim());
+            alert('域名已更新为: ' + newDomain.trim() + '\n刷新页面生效');
+        }
+    });
+
+    GM_registerMenuCommand('🔄 重置域名为默认值', () => {
+        GM_setValue('annas_archive_domain', DEFAULT_DOMAIN);
+        alert('域名已重置为: ' + DEFAULT_DOMAIN + '\n刷新页面生效');
+    });
 
     // 主函数
     function main() {
@@ -60,7 +88,8 @@
 
     // 在安娜档案搜索
     function searchAnnasArchive(bookTitle) {
-        const searchUrl = `https://zh.annas-archive.org/search?q=${encodeURIComponent(bookTitle)}`;
+        const domain = getDomain();
+        const searchUrl = `https://${domain}/search?q=${encodeURIComponent(bookTitle)}`;
 
         GM_xmlhttpRequest({
             method: 'GET',
@@ -103,7 +132,7 @@
 
             const result = {
                 title: titleElement.textContent.trim(),
-                link: 'https://zh.annas-archive.org' + linkElement.getAttribute('href'),
+                link: `https://${getDomain()}${linkElement.getAttribute('href')}`,
                 format: formatElement ? formatElement.textContent.trim() : '未知格式',
                 author: authorElement ? authorElement.textContent.trim() : '未知作者'
             };
