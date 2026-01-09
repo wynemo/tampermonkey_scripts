@@ -11,12 +11,7 @@
 // @grant        GM_getValue
 // @grant        GM_setValue
 // @grant        GM_registerMenuCommand
-// @connect      zh.annas-archive.se
-// @connect      zh.annas-archive.org
-// @connect      zh.annas-archive.gs
-// @connect      annas-archive.se
-// @connect      annas-archive.org
-// @connect      annas-archive.gs
+// @connect      *
 // @license MIT
 // ==/UserScript==
 
