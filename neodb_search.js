@@ -153,46 +153,21 @@
 
     // 在页面上显示结果
     function displayResults(results, searchUrl) {
-        // 创建结果容器 - 固定在页面右侧
+        // 创建结果容器
         const container = document.createElement('div');
         container.className = 'annas-archive-results';
-        container.style.cssText = `
-            position: fixed;
-            top: 80px;
-            right: 20px;
-            width: 320px;
-            max-height: calc(100vh - 100px);
-            overflow-y: auto;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background-color: #f9f9f9;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            z-index: 9999;
-            font-size: 14px;
-        `;
+        container.style.cssText = 'margin-top: 20px; padding: 15px; border: 1px solid #ddd; border-radius: 8px; background-color: #f9f9f9; font-size: 14px;';
 
-        // 添加标题栏（含关闭按钮）
-        const header = document.createElement('div');
-        header.style.cssText = 'display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;';
-
+        // 添加标题
         const title = document.createElement('h3');
         title.textContent = '安娜档案搜索结果';
-        title.style.cssText = 'margin: 0; font-size: 16px;';
-        header.appendChild(title);
-
-        const closeBtn = document.createElement('button');
-        closeBtn.textContent = '×';
-        closeBtn.style.cssText = 'border: none; background: none; font-size: 20px; cursor: pointer; color: #666;';
-        closeBtn.onclick = () => container.remove();
-        header.appendChild(closeBtn);
-
-        container.appendChild(header);
+        title.style.cssText = 'margin: 0 0 10px 0; font-size: 16px;';
+        container.appendChild(title);
 
         // 添加搜索链接
         const searchLink = document.createElement('a');
         searchLink.href = searchUrl;
-        searchLink.textContent = '在安娜档案中查看完整结果 →';
+        searchLink.textContent = '查看完整结果 →';
         searchLink.target = '_blank';
         searchLink.style.cssText = 'display: block; margin-bottom: 10px; color: #0066cc; font-size: 13px;';
         container.appendChild(searchLink);
@@ -230,8 +205,14 @@
             container.appendChild(resultsList);
         }
 
-        // 直接添加到 body
-        document.body.appendChild(container);
+        // 插入到页面右侧边栏
+        const sidebar = document.querySelector('#item-sidebar');
+        if (sidebar) {
+            sidebar.appendChild(container);
+        } else {
+            // 备选：添加到 body
+            document.body.appendChild(container);
+        }
     }
 
     // 页面加载完成后执行
