@@ -153,59 +153,74 @@
 
     // 在页面上显示结果
     function displayResults(results, searchUrl) {
-        // 创建结果容器
+        // 创建结果容器 - 固定在页面右侧
         const container = document.createElement('div');
         container.className = 'annas-archive-results';
-        container.style.margin = '20px 0';
-        container.style.padding = '15px';
-        container.style.border = '1px solid #ddd';
-        container.style.borderRadius = '5px';
-        container.style.backgroundColor = '#f9f9f9';
+        container.style.cssText = `
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            width: 320px;
+            max-height: calc(100vh - 100px);
+            overflow-y: auto;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 9999;
+            font-size: 14px;
+        `;
 
-        // 添加标题
+        // 添加标题栏（含关闭按钮）
+        const header = document.createElement('div');
+        header.style.cssText = 'display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;';
+
         const title = document.createElement('h3');
         title.textContent = '安娜档案搜索结果';
-        title.style.marginBottom = '15px';
-        container.appendChild(title);
+        title.style.cssText = 'margin: 0; font-size: 16px;';
+        header.appendChild(title);
+
+        const closeBtn = document.createElement('button');
+        closeBtn.textContent = '×';
+        closeBtn.style.cssText = 'border: none; background: none; font-size: 20px; cursor: pointer; color: #666;';
+        closeBtn.onclick = () => container.remove();
+        header.appendChild(closeBtn);
+
+        container.appendChild(header);
 
         // 添加搜索链接
         const searchLink = document.createElement('a');
         searchLink.href = searchUrl;
-        searchLink.textContent = '在安娜档案中查看完整搜索结果';
+        searchLink.textContent = '在安娜档案中查看完整结果 →';
         searchLink.target = '_blank';
-        searchLink.style.display = 'inline-block';
-        searchLink.style.marginBottom = '15px';
+        searchLink.style.cssText = 'display: block; margin-bottom: 10px; color: #0066cc; font-size: 13px;';
         container.appendChild(searchLink);
 
         // 如果没有结果
         if (results.length === 0) {
             const noResults = document.createElement('p');
             noResults.textContent = '未找到相关结果';
+            noResults.style.color = '#666';
             container.appendChild(noResults);
         } else {
             // 创建结果列表
             const resultsList = document.createElement('ul');
-            resultsList.style.listStyleType = 'none';
-            resultsList.style.padding = '0';
+            resultsList.style.cssText = 'list-style-type: none; padding: 0; margin: 0;';
 
             results.forEach(result => {
                 const listItem = document.createElement('li');
-                listItem.style.marginBottom = '10px';
-                listItem.style.padding = '10px';
-                listItem.style.border = '1px solid #eee';
-                listItem.style.borderRadius = '3px';
+                listItem.style.cssText = 'margin-bottom: 8px; padding: 8px; border: 1px solid #eee; border-radius: 4px; background: #fff;';
 
                 const resultTitle = document.createElement('a');
                 resultTitle.href = result.link;
                 resultTitle.textContent = result.title;
                 resultTitle.target = '_blank';
-                resultTitle.style.fontWeight = 'bold';
-                resultTitle.style.display = 'block';
+                resultTitle.style.cssText = 'font-weight: bold; display: block; color: #333; text-decoration: none; margin-bottom: 4px; line-height: 1.3;';
                 listItem.appendChild(resultTitle);
 
                 const resultDetails = document.createElement('div');
-                resultDetails.style.fontSize = '0.9em';
-                resultDetails.style.color = '#666';
+                resultDetails.style.cssText = 'font-size: 12px; color: #666; line-height: 1.4;';
                 resultDetails.textContent = `${result.author} | ${result.format}`;
                 listItem.appendChild(resultDetails);
 
@@ -215,14 +230,8 @@
             container.appendChild(resultsList);
         }
 
-        // 将结果添加到页面
-        const contentContainer = document.querySelector('#item-primary-action') || document.querySelector('main');
-        if (contentContainer) {
-            contentContainer.appendChild(container);
-        } else {
-            // 如果找不到合适的容器，添加到 body
-            document.body.appendChild(container);
-        }
+        // 直接添加到 body
+        document.body.appendChild(container);
     }
 
     // 页面加载完成后执行
