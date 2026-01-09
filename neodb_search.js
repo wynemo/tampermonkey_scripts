@@ -121,23 +121,28 @@
     // 从安娜档案页面提取搜索结果
     function extractSearchResults(doc) {
         const results = [];
-        const resultElements = doc.querySelector('#aarecord-list').querySelectorAll('div');
+        const resultElements = doc.querySelectorAll('.js-aarecord-list-outer > div.flex.border-b');
 
         resultElements.forEach(element => {
-            const titleElement = element.querySelector('h3');
+            // 标题 - 带有 js-vim-focus 类的 a 标签
+            const titleElement = element.querySelector('a.js-vim-focus');
             if (!titleElement) return;
 
+            // 链接
             const linkElement = element.querySelector('a[href^="/md5/"]');
             if (!linkElement) return;
 
-            const formatElement = element.querySelector('.text-xs');
-            const authorElement = element.querySelector('.italic');
+            // 格式 - 包含语言、格式、大小的 div
+            const formatDiv = element.querySelector('.text-gray-800.font-semibold.text-sm');
+
+            // 作者 - 带有 user-edit 图标的链接
+            const authorLink = element.querySelector('a[href^="/search?q="] span[class*="user-edit"]');
 
             const result = {
                 title: titleElement.textContent.trim(),
                 link: `https://${getDomain()}${linkElement.getAttribute('href')}`,
-                format: formatElement ? formatElement.textContent.trim() : '未知格式',
-                author: authorElement ? authorElement.textContent.trim() : '未知作者'
+                format: formatDiv ? formatDiv.textContent.split('·').slice(0, 3).join('·').trim() : '未知格式',
+                author: authorLink ? authorLink.parentElement.textContent.trim() : '未知作者'
             };
 
             results.push(result);
