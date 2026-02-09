@@ -2,7 +2,7 @@
 // @name         NeoDB 安娜档案搜索
 // @name:en      annas archive for NeoDB
 // @namespace    http://tampermonkey.net/
-// @version      0.2.0
+// @version      0.3.0
 // @description  在 NeoDB 书籍页面添加安娜档案搜索结果
 // @description:en  dispaly annas archive search result on NeoDB
 // @author       lozhang
@@ -20,7 +20,7 @@
     'use strict';
 
     // 默认域名配置
-    const DEFAULT_DOMAIN = 'zh.annas-archive.se';
+    const DEFAULT_DOMAIN = 'annas-archive.li';
 
     // 获取当前配置的域名
     function getDomain() {
@@ -30,7 +30,7 @@
     // 注册菜单命令
     GM_registerMenuCommand('⚙️ 设置 Anna\'s Archive 域名', () => {
         const currentDomain = getDomain();
-        const newDomain = prompt('请输入 Anna\'s Archive 域名（如 zh.annas-archive.se）：', currentDomain);
+        const newDomain = prompt('请输入 Anna\'s Archive 域名（如 annas-archive.li）：', currentDomain);
         if (newDomain && newDomain.trim()) {
             GM_setValue('annas_archive_domain', newDomain.trim());
             alert('域名已更新为: ' + newDomain.trim() + '\n刷新页面生效');
